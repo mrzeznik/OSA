@@ -44,15 +44,12 @@
   </div>
 </body>
 <script>
-  Notification.requestPermission().then(function (permission) {
-    console.log(permission);
-  });
-
   const title = "OSA: Osobisty System Atencji";
   const baseMinuteMultiplier = 1000 * 60;
   var timerId = undefined;
 
   function startNotificatons() {
+    Notification.requestPermission();
     if (timerId != undefined) { clearInterval(timerId); }
     let interval = baseMinuteMultiplier * document.getElementById("interval").value;
     let bodyBase = document.getElementById("ftext").value;
