@@ -2,7 +2,9 @@
 <html>
 
 <head>
-  <link rel="manifest" href="/manifest.json" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="manifest" href="/OSA/manifest.json" />
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="application-name" content="OSA" />
   <link rel="icon" type="image/x-icon" href="favicon.ico">
@@ -20,7 +22,7 @@
   <script>
     if ("serviceWorker" in navigator) {
       navigator.serviceWorker
-        .register("/sw.js")
+        .register("sw.js")
         .then(serviceWorker => {
           console.log("Service Worker registered: ", serviceWorker);
         })
