@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>OSA</title>
+  <style>
+    body {
+      background-color: #f2f2f2;
+      font-family: Consolas,"Courier New",monospace;
+    }
+
+    .container {
+      min-height: 10em;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>OSA</h1>
+    <h4>Osobisty System Atencji</h4>
+    <label for="ftext">Text:</label>
+    <input type="text" id="ftext" name="ftext"><br><br>
+    <label for="interval">Interval (min):</label>
+    <input type="number" id="interval" name="interval" min="1" max="10080" value="1"><br><br>
+    <input type="submit" onclick="startNotificatons();" value="Run">
+  </div>
+</body>
+<script>
+  Notification.requestPermission().then(function (permission) {
+    console.log(permission);
+  });
+
+  const title = "OSA";
+  const baseMinuteMultiplier = 1000 * 60;
+  var timerId = undefined;
+
+  function startNotificatons() {
+    if (timerId != undefined) { clearInterval(timerId); }
+    let interval = baseMinuteMultiplier * document.getElementById("interval").value;
+    let bodyBase = document.getElementById("ftext").value;
+    console.log("start notifications with timeout: " + interval + "ms and body: " + bodyBase);
+
+    timerId = setInterval(notify, interval, title, bodyBase);
+  }
+
+  function notify(title, body) {
+    var notification = new Notification(title, { body });
+  }
+</script>
+
+</html>
