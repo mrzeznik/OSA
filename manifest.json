@@ -1,7 +1,7 @@
 {
     "name": "OSA PWA",
     "short_name": "OSA",
-    "description": "Progressive Web App that lists games submitted to the A-Frame category in the js13kGames 2017 competition.",
+    "description": "User defined notifications.",
     "icons": [
         {
             "src": "icons/osa-32.png",
@@ -36,6 +36,11 @@
         {
             "src": "icons/osa-256.png",
             "sizes": "256x256",
+            "type": "image/png"
+        },
+        {
+            "src": "icons/osa-256.png",
+            "sizes": "512x512",
             "type": "image/png"
         }
     ],

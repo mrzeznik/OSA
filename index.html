@@ -2,19 +2,32 @@
 <html>
 
 <head>
-  <link rel="manifest" href="/osa.webmanifest" />
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="application-name" content="OSA" />
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <title>OSA</title>
   <style>
     body {
       background-color: #f2f2f2;
-      font-family: Consolas,"Courier New",monospace;
+      font-family: Consolas, "Courier New", monospace;
     }
 
     .container {
       min-height: 10em;
     }
   </style>
+  <script>
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker
+        .register("/sw.js")
+        .then(serviceWorker => {
+          console.log("Service Worker registered: ", serviceWorker);
+        })
+        .catch(error => {
+          console.error("Error registering the Service Worker: ", error);
+        });
+    }</script>
 </head>
 
 <body>
@@ -47,7 +60,8 @@
   }
 
   function notify(title, body) {
-    var notification = new Notification(title, { body });
+    let icon = "icons/osa.png";
+    var notification = new Notification("", { body, icon });
   }
 </script>
 
