@@ -2,6 +2,8 @@ const cacheName = 'OSA-SW';
 const cacheFiles = [
   '/',
   '/index.html',
+  '/sw.js',
+  '/manifest.json',
   '/favicon.ico',
   '/icons/osa-32.png',
   '/icons/osa-64.png',
