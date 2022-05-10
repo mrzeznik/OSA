@@ -1,7 +1,7 @@
 {
-    "name": "OSA PWA",
+    "name": "Osobisty System Atencji",
     "short_name": "OSA",
-    "description": "User defined notifications.",
+    "description": "User defined notification system.",
     "icons": [
         {
             "src": "icons/osa-32.png",
