@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="manifest" href="/OSA/manifest.json" />
+  <link rel="manifest" href="/manifest.json" />
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="application-name" content="OSA" />
   <link rel="icon" type="image/x-icon" href="favicon.ico">
@@ -22,7 +22,7 @@
   <script>
     if ("serviceWorker" in navigator) {
       navigator.serviceWorker
-        .register("ssw.js")
+        .register("sw.js")
         .then(serviceWorker => {
           console.log("Service Worker registered: ", serviceWorker);
         })
@@ -36,8 +36,8 @@
   <div class="container">
     <h1>OSA</h1>
     <h4>Osobisty System Atencji</h4>
-    <label for="ftext">Text:</label>
-    <input type="text" id="ftext" name="ftext" value="Mrugaj oczami"><br><br>
+    <label for="notificationText">Text:</label>
+    <input type="text" id="notificationText" name="notificationText" value="Mrugaj oczami" placeholder="Your notification text..."><br><br>
     <label for="interval">Interval (min):</label>
     <input type="number" id="interval" name="interval" min="1" max="10080" value="10"><br><br>
     <input type="submit" onclick="startNotificatons();" value="Run">
@@ -47,13 +47,20 @@
   const title = "OSA: Osobisty System Atencji";
   const baseMinuteMultiplier = 1000 * 60;
   var timerId = undefined;
+  let defaultInterval = window.localStorage.getItem('osa-interval') ?
+    window.localStorage.getItem('osa-interval') : 10 * baseMinuteMultiplier;
+  let defaultBody = window.localStorage.getItem('osa-text') ?
+    JSON.parse(window.localStorage.getItem('osa-text')) : 'HEY';
 
   function startNotificatons() {
     Notification.requestPermission();
+
     if (timerId != undefined) { clearInterval(timerId); }
-    let interval = baseMinuteMultiplier * document.getElementById("interval").value;
-    let bodyBase = document.getElementById("ftext").value;
-    console.log("start notifications with timeout: " + interval + "ms and body: " + bodyBase);
+    let interval = baseMinuteMultiplier * document.getElementById('interval').value;
+    let bodyBase = document.getElementById('notificationText').value;
+    console.log('start notifications with timeout: ' + interval + 'ms and body: ' + bodyBase);
+    window.localStorage.setItem('osa-timeout', interval);
+    window.localStorage.setItem('osa-text', JSON.stringify(bodyBase));
 
     timerId = setInterval(notify, interval, title, bodyBase);
   }
