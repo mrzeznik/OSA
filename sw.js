@@ -7,8 +7,10 @@ const cacheFiles = [
   '/favicon.ico',
   '/icons/osa-32.png',
   '/icons/osa-64.png',
+  '/icons/osa-96.png',
   '/icons/osa-128.png',
   '/icons/osa-192.png',
+  '/icons/osa-256.png'
 ];
 
 self.addEventListener("install", (e) => {
