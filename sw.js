@@ -9,7 +9,7 @@ const cacheFiles = [
   '/icons/osa-192.png',
 ];
 
-self.addEventListener("install", event => {
+self.addEventListener("install", (e) => {
   console.log('[Service Worker] Install');
   e.waitUntil((async () => {
     const cache = await caches.open(cacheName);
