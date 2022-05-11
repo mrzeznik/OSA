@@ -37,7 +37,7 @@ self.addEventListener('fetch', (e) => {
 
 self.addEventListener("activate", event => {
   console.log("Service Worker activating.");
-  self.registration.showNotification('ACTIVATE', {body: String.concat('date: ', new Date())});
+  self.registration.showNotification('ACTIVATE', {body: string.concat('date: ', new Date())});
 });
 
 self.addEventListener('message', event => {
@@ -45,9 +45,9 @@ self.addEventListener('message', event => {
 	console.log('Something going on');
 });
 
-self.registration.showNotification('START', {body: String.concat('date: ', new Date())});
+self.registration.showNotification('START', {body: string.concat('date: ', new Date())});
 
-setInterval(function () { self.registration.showNotification('test', {body: String.concat('date: ', new Date())})}, 10000);
+setInterval(function () { self.registration.showNotification('test', {body: string.concat('date: ', new Date())})}, 10000);
 
 
 self.addEventListener('sync', function(event) {
