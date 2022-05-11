@@ -63,7 +63,10 @@
   notificationInput.value = defaultBody;
 
   function stop() {
-    if (timerId != undefined) { clearInterval(timerId); }
+    if (timerId != undefined) {
+      clearInterval(timerId);
+      console.info('stopped notifications for timerId ${timerId}');
+    }
   }
 
   function startNotificatons() {

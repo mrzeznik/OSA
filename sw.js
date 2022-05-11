@@ -44,6 +44,7 @@ self.addEventListener('message', event => {
 	if (event.data.type !== 'notification') return;
 	console.log('Something going on');
 });
+
 self.registration.showNotification('START', {body: String.concat('date: ', new Date())});
 
 setInterval(function () { self.registration.showNotification('test', {body: String.concat('date: ', new Date())})}, 10000);
