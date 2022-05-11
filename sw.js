@@ -37,7 +37,7 @@ self.addEventListener('fetch', (e) => {
 
 self.addEventListener("activate", event => {
   console.log("Service Worker activating.");
-  self.registration.showNotification('ACTIVATE', {body: 'date: ' + new Date()});
+  self.registration.showNotification('ACTIVATED', {body: 'date: ' + new Date()});
 });
 
 self.addEventListener('message', event => {
@@ -45,9 +45,9 @@ self.addEventListener('message', event => {
 	console.log('Something going on');
 });
 
-self.registration.showNotification('ACTIVATE', {body: 'date: ' + new Date()});
+self.registration.showNotification('normal', {body: 'date: ' + new Date()});
 
-setInterval(function () { self.registration.showNotification('test', {body: 'date: ' + new Date()})}, 10000);
+setInterval(function () { self.registration.showNotification('interval', {body: 'date: ' + new Date()})}, 10000);
 
 
 self.addEventListener('sync', function(event) {
@@ -58,5 +58,5 @@ self.addEventListener('sync', function(event) {
 });
 
 function syncAttendees(){
-	return  self.registration.showNotification(`attendees to the PWA Workshop`);
+	return  self.registration.showNotification(`sync request`);
 }
