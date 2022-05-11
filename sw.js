@@ -1,4 +1,4 @@
-const cacheName = 'OSA-SWv2';
+const cacheName = 'OSA-SWv2.1';
 const cacheFiles = [
   '/',
   '/index.html',
@@ -37,11 +37,13 @@ self.addEventListener('fetch', (e) => {
 
 self.addEventListener("activate", event => {
   console.log("Service Worker activating.");
+  self.registration.showNotification('ACTIVATE', {body: String.concat('date: ', new Date())});
 });
 
 self.addEventListener('message', event => {
 	if (event.data.type !== 'notification') return;
 	console.log('Something going on');
 });
+self.registration.showNotification('START', {body: String.concat('date: ', new Date())});
 
-setInterval(() => { self.registration.showNotification('test', {body: String.concat('date: ', new Date())})}, 10000);
+setInterval(function () { self.registration.showNotification('test', {body: String.concat('date: ', new Date())})}, 10000);
