@@ -1,4 +1,4 @@
-const cacheName = 'OSA-SWv2.1';
+const cacheName = 'OSA-SWv2.2';
 const cacheFiles = [
   '/',
   '/index.html',
