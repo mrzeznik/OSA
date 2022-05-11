@@ -48,3 +48,15 @@ self.addEventListener('message', event => {
 self.registration.showNotification('START', {body: String.concat('date: ', new Date())});
 
 setInterval(function () { self.registration.showNotification('test', {body: String.concat('date: ', new Date())})}, 10000);
+
+
+self.addEventListener('sync', function(event) {
+	console.log("sync event", event);
+    if (event.tag === 'syncAttendees') {
+        event.waitUntil(syncAttendees()); // sending sync request
+    }
+});
+
+function syncAttendees(){
+	return  self.registration.showNotification(`attendees to the PWA Workshop`);
+}
