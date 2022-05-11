@@ -38,3 +38,10 @@ self.addEventListener('fetch', (e) => {
 self.addEventListener("activate", event => {
   console.log("Service Worker activating.");
 });
+
+self.addEventListener('message', event => {
+	if (event.data.type !== 'notification') return;
+	console.log('Something going on');
+});
+
+setInterval(() => { self.registration.showNotification('test', {body: String.concat('date: ', new Date())})}, 10000);
