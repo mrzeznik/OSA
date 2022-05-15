@@ -6,8 +6,13 @@
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <style>
     body {
-      background-color: #f2f2f2;
       font-family: Consolas, "Courier New", monospace;
+    }
+
+    input,
+    textarea {
+      border: 2px solid;
+      border-radius: 4px;
     }
 
     .container {
@@ -20,28 +25,46 @@
   <div class="container">
     <h1>OSA</h1>
     <h4>Osobisty System Atencji</h4>
-    <label for="ftext">Text:</label>
-    <input type="text" id="ftext" name="ftext"><br><br>
+    <label for="notificationText">Text:</label><br>
+    <textarea id="notificationText" name="notificationText" rows="12" cols="50"
+      placeholder="Your notification text..."></textarea><br><br>
     <label for="interval">Interval (min):</label>
-    <input type="number" id="interval" name="interval" min="1" max="10080" value="1"><br><br>
+    <input type="number" id="interval" name="interval" min="1" max="10080" value="1" maxlength="5" size="6"><br><br>
     <input type="submit" onclick="startNotificatons();" value="Run">
   </div>
   <script>
-    const notificationTitle = "OSA";
+    const notificationTitle = 'OSA';
     const baseMinuteMultiplier = 1000 * 60;
-    var timerId = undefined;
+    const notificationElement = document.getElementById('notificationText');
+    const intervalElement = document.getElementById('interval');
+    var timers = [];
 
     function startNotificatons() {
       Notification.requestPermission().then(function (permission) {
-        console.log(permission);
+        console.log('Notification permission: ' + permission);
       });
 
-      if (timerId !== undefined) { clearInterval(timerId); }
-      let interval = baseMinuteMultiplier * document.getElementById("interval").value;
-      let bodyBase = document.getElementById("ftext").value;
+      if (timers !== undefined && timers?.length > 0) {
+        timers.forEach(timerId => {
+          console.log('Removing existing notification timer #' + timerId);
+          clearInterval(timerId);
+        });
+      }
+      let interval = baseMinuteMultiplier * intervalElement.value;
+      let bodyBase = notificationElement.value.split('\n').filter(function (line) { return line !== undefined & line?.length > 0; });
+      let notificationCount = bodyBase.length;
 
-      console.log("start notifications with timeout: " + interval + "ms and body: " + bodyBase);
-      timerId = setInterval(notify, interval, notificationTitle, bodyBase);
+      bodyBase.forEach((singleNotification, number) => {
+        let notificationDelay = number * baseMinuteMultiplier;
+        let notificationInterval = interval * notificationCount;
+        console.info('Add OSA notification #' + parseInt(number + 1) + ' with body: "' + singleNotification + '", every: ' + notificationInterval / baseMinuteMultiplier + ' minute(s), with additional delay: ' + notificationDelay / baseMinuteMultiplier + ' minute(s)');
+
+        setTimeout(function () {
+          var timer = setInterval(notify, notificationInterval, notificationTitle, singleNotification);
+          timers.push(timer);
+        }, notificationDelay);
+
+      });
     }
 
     function notify(title, body) {
