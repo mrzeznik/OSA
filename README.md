@@ -1,8 +1,8 @@
 # OSA
 ## Osobisty System Atencji
 
-OSA is general purpose notification system, for those who cannot/don't want to install notification software.  
-I wanted something to remind me about breaks with some interval.
+OSA is general purpose personal notification system, for those who cannot/don't want to install notification software.  
+One can use it, to display notifications about breaks, reocurring actions, things to focus on.
 
 ## Requirements
 It works with most modern browsers (Firefox, Edge, Chrome, Opera, Safari).  

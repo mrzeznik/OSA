@@ -6,7 +6,7 @@
   <style>
     body {
       background-color: #f2f2f2;
-      font-family: Consolas,"Courier New",monospace;
+      font-family: Consolas, "Courier New", monospace;
     }
 
     .container {
@@ -25,28 +25,28 @@
     <input type="number" id="interval" name="interval" min="1" max="10080" value="1"><br><br>
     <input type="submit" onclick="startNotificatons();" value="Run">
   </div>
+  <script>
+    const notificationTitle = "OSA";
+    const baseMinuteMultiplier = 1000 * 60;
+    var timerId = undefined;
+
+    function startNotificatons() {
+      Notification.requestPermission().then(function (permission) {
+        console.log(permission);
+      });
+
+      if (timerId !== undefined) { clearInterval(timerId); }
+      let interval = baseMinuteMultiplier * document.getElementById("interval").value;
+      let bodyBase = document.getElementById("ftext").value;
+
+      console.log("start notifications with timeout: " + interval + "ms and body: " + bodyBase);
+      timerId = setInterval(notify, interval, notificationTitle, bodyBase);
+    }
+
+    function notify(title, body) {
+      var notification = new Notification(title, { body });
+    }
+  </script>
 </body>
-<script>
-  Notification.requestPermission().then(function (permission) {
-    console.log(permission);
-  });
-
-  const title = "OSA";
-  const baseMinuteMultiplier = 1000 * 60;
-  var timerId = undefined;
-
-  function startNotificatons() {
-    if (timerId != undefined) { clearInterval(timerId); }
-    let interval = baseMinuteMultiplier * document.getElementById("interval").value;
-    let bodyBase = document.getElementById("ftext").value;
-    console.log("start notifications with timeout: " + interval + "ms and body: " + bodyBase);
-
-    timerId = setInterval(notify, interval, title, bodyBase);
-  }
-
-  function notify(title, body) {
-    var notification = new Notification(title, { body });
-  }
-</script>
 
 </html>
