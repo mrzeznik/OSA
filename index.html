@@ -38,37 +38,53 @@
     const notificationElement = document.getElementById('notificationText');
     const intervalElement = document.getElementById('interval');
     var timers = [];
+    var delayed = [];
 
     function startNotificatons() {
       Notification.requestPermission().then(function (permission) {
         console.log('Notification permission: ' + permission);
       });
 
-      if (timers !== undefined && timers?.length > 0) {
-        timers.forEach(timerId => {
-          console.log('Removing existing notification timer #' + timerId);
-          clearInterval(timerId);
-        });
-      }
+      removeNotifications();
+
       let interval = baseMinuteMultiplier * intervalElement.value;
-      let bodyBase = notificationElement.value.split('\n').filter(function (line) { return line !== undefined & line?.length > 0; });
-      let notificationCount = bodyBase.length;
+      let bodyBase = notificationElement.value
+        .split('\n')
+        .map(function (line) { return line.trim(); })
+        .filter(function (line) { return line !== undefined & line?.length > 0; }) || [];
 
-      bodyBase.forEach((singleNotification, number) => {
-        let notificationDelay = number * baseMinuteMultiplier;
-        let notificationInterval = interval * notificationCount;
-        console.info('Add OSA notification #' + parseInt(number + 1) + ' with body: "' + singleNotification + '", every: ' + notificationInterval / baseMinuteMultiplier + ' minute(s), with additional delay: ' + notificationDelay / baseMinuteMultiplier + ' minute(s)');
+      setMultipleNotifications(bodyBase, interval);
+    }
 
-        setTimeout(function () {
+    function setMultipleNotifications(text, interval) {
+      let notificationCount = text.length;
+      let notificationInterval = interval * notificationCount;
+      text.forEach((singleNotification, notificationNumber) => {
+        let notificationDelay = notificationNumber * baseMinuteMultiplier;
+        console.info('Add OSA notification #' + parseInt(notificationNumber + 1) + ' body: "' + singleNotification + '", every: ' + notificationInterval / baseMinuteMultiplier + ' minute(s), initial delay: ' + notificationDelay / baseMinuteMultiplier + ' minute(s)');
+
+        let delay = setTimeout(function () {
           var timer = setInterval(notify, notificationInterval, notificationTitle, singleNotification);
           timers.push(timer);
         }, notificationDelay);
-
+        delayed.push(delay);
       });
     }
 
     function notify(title, body) {
       var notification = new Notification(title, { body });
+    }
+
+    function removeNotifications() {
+      console.log("Removing existing notifications.");
+      timers.forEach(function (timer) {
+        clearInterval(timer);
+      });
+      timers = [];
+      delayed.forEach(function (delay) {
+        clearTimeout(delay);
+      });
+      delayed = [];
     }
   </script>
 </body>
