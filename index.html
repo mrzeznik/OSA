@@ -67,14 +67,14 @@
         console.info('Add notification #' + parseInt(notificationNumber + 1) + ': "' + notificationText + '", every: ' + notificationEffectiveInterval + ' ms, initial delay: ' + notificationDelay + ' ms');
 
         let delay = setTimeout(function () {
-          var timer = notifyWithInterval(notificationTitle, notificationText, notificationEffectiveInterval);
+          var timer = addIntervalNotification(notificationTitle, notificationText, notificationEffectiveInterval);
           timers.push(timer);
         }, notificationDelay);
         delayed.push(delay);
       });
     }
 
-    function notifyWithInterval(title, body, interval) {
+    function addIntervalNotification(title, body, interval) {
       return setInterval(function () {
         new Notification(title, { body, tag: 'osa_notification' })
       }, interval);
