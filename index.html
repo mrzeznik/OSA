@@ -86,8 +86,8 @@
     let defaultBody = window.localStorage.getItem('osa-text') ?
       JSON.parse(window.localStorage.getItem('osa-text')) : 'Take a short break!';
 
-    intervalElement.value = defaultInterval;
     intervalElement.max = MAX_INTERVAL_MIN;
+    intervalElement.value = defaultInterval;
     notificationElement.value = defaultBody;
     intervalOutput.innerHTML = intervalElement.value;
 
