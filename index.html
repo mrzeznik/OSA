@@ -91,7 +91,7 @@
     notificationElement.value = defaultBody;
     intervalOutput.innerHTML = intervalElement.value;
 
-    function startNotificatons() {
+    function startNotifications() {
       Notification.requestPermission().then(function (permission) {
         console.log('Notification permission: ' + permission);
       });
