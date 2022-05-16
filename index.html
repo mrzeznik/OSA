@@ -25,7 +25,7 @@
   <div class="container">
     <h1>OSA</h1>
     <h4>Osobisty System Atencji</h4>
-    <label for="notificationText">Text:</label><br>
+    <label for="notificationText">Notification(s):</label><br>
     <textarea id="notificationText" name="notificationText" rows="12" cols="50"
       placeholder="Your notification text..."></textarea><br><br>
     <label for="interval">Interval (min):</label>
@@ -53,28 +53,31 @@
         .map(function (line) { return line.trim(); })
         .filter(function (line) { return line !== undefined & line?.length > 0; }) || [];
 
-      setMultipleNotifications(bodyBase, interval);
+      setMultipleNotifications(interval, bodyBase);
     }
 
-    function setMultipleNotifications(notifications, interval) {
-      if (interval < 1) return;
+    function setMultipleNotifications(interval, notifications) {
+      if (interval < 1 || notifications === undefined || notifications.length < 1) return;
 
       let notificationCount = notifications.length;
-      let notificationInterval = interval * notificationCount * baseMinuteMultiplier;
+      let notificationEffectiveInterval = interval * notificationCount * baseMinuteMultiplier;
+
       notifications.forEach((notificationText, notificationNumber) => {
-        let notificationDelay = notificationNumber * notificationInterval;
-        console.info('Add notification #' + parseInt(notificationNumber + 1) + ': "' + notificationText + '", every: ' + notificationInterval + ' ms, initial delay: ' + notificationDelay + ' ms');
+        let notificationDelay = notificationNumber * interval * baseMinuteMultiplier;
+        console.info('Add notification #' + parseInt(notificationNumber + 1) + ': "' + notificationText + '", every: ' + notificationEffectiveInterval + ' ms, initial delay: ' + notificationDelay + ' ms');
 
         let delay = setTimeout(function () {
-          var timer = setInterval(notify, notificationInterval, notificationTitle, notificationText);
+          var timer = notifyWithInterval(notificationTitle, notificationText, notificationEffectiveInterval);
           timers.push(timer);
         }, notificationDelay);
         delayed.push(delay);
       });
     }
 
-    function notify(title, body) {
-      var notification = new Notification(title, { body });
+    function notifyWithInterval(title, body, interval) {
+      return setInterval(function () {
+        new Notification(title, { body })
+      }, interval);
     }
 
     function removeNotifications() {
