@@ -76,7 +76,7 @@
 
     function notifyWithInterval(title, body, interval) {
       return setInterval(function () {
-        new Notification(title, { body })
+        new Notification(title, { body, tag: 'osa_notification' })
       }, interval);
     }
 
