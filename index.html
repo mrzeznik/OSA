@@ -67,7 +67,7 @@
     <textarea id="notificationText" name="notificationText" rows="12" cols="50"
       placeholder="Your notification text..."></textarea><br><br>
     <label for="interval">Notification interval: <span id="intervalOutput"></span> min</label><br>
-    <input type="range" min="1" max="120" value="10" class="slider" id="interval"><br><br>
+    <input type="range" min="1" class="slider" id="interval"><br><br>
     <input type="submit" onclick="startNotificatons();" value="Run">
   </div>
   <script>
@@ -145,7 +145,7 @@
       delayed = [];
     }
 
-    intervalElement.addEventListener("change", event => {
+    intervalElement.addEventListener("input", event => {
       intervalOutput.innerHTML = intervalElement.value;
       window.localStorage.setItem('osa-interval', intervalElement.value);
     });
