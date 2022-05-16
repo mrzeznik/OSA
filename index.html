@@ -47,7 +47,7 @@
 
       removeNotifications();
 
-      let interval = baseMinuteMultiplier * intervalElement.value;
+      let interval = intervalElement.value;
       let bodyBase = notificationElement.value
         .split('\n')
         .map(function (line) { return line.trim(); })
@@ -56,15 +56,17 @@
       setMultipleNotifications(bodyBase, interval);
     }
 
-    function setMultipleNotifications(text, interval) {
-      let notificationCount = text.length;
-      let notificationInterval = interval * notificationCount;
-      text.forEach((singleNotification, notificationNumber) => {
-        let notificationDelay = notificationNumber * baseMinuteMultiplier;
-        console.info('Add OSA notification #' + parseInt(notificationNumber + 1) + ' body: "' + singleNotification + '", every: ' + notificationInterval / baseMinuteMultiplier + ' minute(s), initial delay: ' + notificationDelay / baseMinuteMultiplier + ' minute(s)');
+    function setMultipleNotifications(notifications, interval) {
+      if (interval < 1) return;
+
+      let notificationCount = notifications.length;
+      let notificationInterval = interval * notificationCount * baseMinuteMultiplier;
+      notifications.forEach((notificationText, notificationNumber) => {
+        let notificationDelay = notificationNumber * notificationInterval;
+        console.info('Add notification #' + parseInt(notificationNumber + 1) + ': "' + notificationText + '", every: ' + notificationInterval + ' ms, initial delay: ' + notificationDelay + ' ms');
 
         let delay = setTimeout(function () {
-          var timer = setInterval(notify, notificationInterval, notificationTitle, singleNotification);
+          var timer = setInterval(notify, notificationInterval, notificationTitle, notificationText);
           timers.push(timer);
         }, notificationDelay);
         delayed.push(delay);
