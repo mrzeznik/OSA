@@ -40,7 +40,7 @@
       opacity: 1;
     }
 
-    /* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */
+    /* slider handle for Chrome, Opera, Safari, Edge */
     .slider::-webkit-slider-thumb {
       -webkit-appearance: none;
       appearance: none;
@@ -50,6 +50,7 @@
       cursor: pointer;
     }
 
+    /* slider handle for Firefox */
     .slider::-moz-range-thumb {
       width: 15px;
       height: 15px;
@@ -63,18 +64,19 @@
   <div class="container">
     <h1>OSA</h1>
     Osobisty System Atencji<br>
-    <label for="notificationText">Notification(s):</label><br><br>
+    <label for="notificationText">Your notification(s):</label><br><br>
     <textarea id="notificationText" name="notificationText" rows="12" cols="50"
       placeholder="Your notification text..."></textarea><br><br>
     <label for="interval">Notification interval: <span id="intervalOutput"></span> min</label><br>
     <input type="range" min="1" class="slider" id="interval"><br><br>
-    <input type="submit" onclick="startNotificatons();" value="Run">
+    <input type="submit" onclick="startNotifications();" value="Run">
   </div>
   <script>
     const BASE_MINUTE_MULTIPLIER_MS = 1000 * 60;
     const MAX_INTERVAL_MIN = 140;
     const MIN_INTERVAL_MS = 5000;
     const MAX_INTERVAL_MS = MAX_INTERVAL_MIN * BASE_MINUTE_MULTIPLIER_MS;
+    const NOTIFICATION_DELIMITER = '\n';
     const notificationTitle = 'OSA';
     const notificationElement = document.getElementById('notificationText');
     const intervalElement = document.getElementById('interval');
@@ -82,9 +84,8 @@
     var timers = [];
     var delayed = [];
 
-    let defaultInterval = window.localStorage.getItem('osa-interval') || 20;
-    let defaultBody = window.localStorage.getItem('osa-text') ?
-      JSON.parse(window.localStorage.getItem('osa-text')) : 'Take a short break!';
+    let defaultInterval = window.localStorage.getItem('osa-interval') ?? 20;
+    let defaultBody = JSON.parse(window.localStorage.getItem('osa-text')) ?? 'Take a short break!';
 
     intervalElement.max = MAX_INTERVAL_MIN;
     intervalElement.value = defaultInterval;
@@ -92,7 +93,7 @@
     intervalOutput.innerHTML = intervalElement.value;
 
     function startNotifications() {
-      Notification.requestPermission().then(function (permission) {
+      Notification.requestPermission().then((permission) => {
         console.log('Notification permission: ' + permission);
       });
 
@@ -100,15 +101,15 @@
 
       let interval = intervalElement.value;
       let bodyBase = notificationElement.value
-        .split('\n')
-        .map(function (line) { return line.trim(); })
-        .filter(function (line) { return line !== undefined & line?.length > 0; }) || [];
+        .split(NOTIFICATION_DELIMITER)
+        .map(line => { return line.trim(); })
+        .filter(line => { return line !== undefined & line?.length > 0; }) ?? [];
 
       setMultipleNotifications(interval, bodyBase);
     }
 
     function setMultipleNotifications(interval, notifications) {
-      if (interval < 1 || notifications === undefined || notifications.length < 1 || interval > MAX_INTERVAL_MS) return;
+      if (interval < 1 || interval > MAX_INTERVAL_MIN || notifications === undefined || notifications.length < 1) return;
 
       let notificationCount = notifications.length;
       let notificationEffectiveInterval = interval * notificationCount * BASE_MINUTE_MULTIPLIER_MS;
@@ -117,7 +118,7 @@
         let notificationDelay = notificationNumber * interval * BASE_MINUTE_MULTIPLIER_MS;
         console.info('Add notification #' + parseInt(notificationNumber + 1) + ': "' + notificationText + '", every: ' + notificationEffectiveInterval + ' ms, initial delay: ' + notificationDelay + ' ms');
 
-        let delay = setTimeout(function () {
+        let delay = setTimeout(() => {
           var timer = addIntervalNotification(notificationTitle, notificationText, notificationEffectiveInterval);
           timers.push(timer);
         }, notificationDelay);
@@ -128,7 +129,7 @@
     function addIntervalNotification(title, body, interval) {
       if (interval < MIN_INTERVAL_MS) return;
 
-      return setInterval(function () {
+      return setInterval(() => {
         new Notification(title, { body, tag: 'osa_notification' })
       }, interval);
     }
@@ -146,11 +147,13 @@
     }
 
     intervalElement.addEventListener("input", event => {
-      intervalOutput.innerHTML = intervalElement.value;
+      intervalOutput.innerHTML = event.target.value;
+    });
+    intervalElement.addEventListener("change", event => {
       window.localStorage.setItem('osa-interval', intervalElement.value);
     });
     notificationElement.addEventListener("change", event => {
-      window.localStorage.setItem('osa-text', JSON.stringify(notificationElement.value));
+      window.localStorage.setItem('osa-text', JSON.stringify(event.target.value));
     });
   </script>
 </body>
