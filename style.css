@@ -1,0 +1,52 @@
+body {
+    font-family: Consolas, "Courier New", monospace;
+    text-align: center;
+}
+
+form {
+    display: inline-block;
+}
+
+input,
+textarea {
+    border-radius: 4px;
+    width: 50em;
+}
+
+.container {
+    min-height: 10em;
+    margin: 0 auto;
+}
+
+.slider {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 15px;
+    background: lightgray;
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+}
+
+.slider:hover {
+    opacity: 1;
+}
+
+/* slider handle for Chrome, Opera, Safari, Edge */
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 15px;
+    height: 15px;
+    background: darkorchid;
+    cursor: pointer;
+}
+
+/* slider handle for Firefox */
+.slider::-moz-range-thumb {
+    width: 15px;
+    height: 15px;
+    background: orchid;
+    cursor: pointer;
+}
