@@ -1,3 +1,5 @@
+"use strict";
+
 const BASE_MINUTE_MULTIPLIER_MS = 1000 * 60;
 const MAX_INTERVAL_MIN = 140;
 const MIN_INTERVAL_MS = 5000;
@@ -6,6 +8,7 @@ const NOTIFICATION_DELIMITER = '\n';
 const notificationTitle = 'OSA';
 const notificationElement = document.getElementById('notificationText');
 const intervalElement = document.getElementById('interval');
+const controlElement = document.getElementById('controlButton');
 const intervalOutput = document.getElementById('intervalOutput');
 var timers = [];
 var delayed = [];
@@ -22,8 +25,6 @@ function startNotifications() {
     Notification.requestPermission().then((permission) => {
         console.log('Notification permission: ' + permission);
     });
-
-    removeNotifications();
 
     let interval = intervalElement.value;
     let bodyBase = notificationElement.value
@@ -72,6 +73,17 @@ function removeNotifications() {
     delayed = [];
 }
 
+controlElement.addEventListener("click", event => {
+    var initial = event.target.value;
+    removeNotifications();
+
+    if (initial === 'Start') {
+        event.target.value = 'Stop';
+        startNotifications();
+    } else {
+        event.target.value = 'Start';
+    }
+});
 intervalElement.addEventListener("input", event => {
     intervalOutput.innerHTML = event.target.value;
 });

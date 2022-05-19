@@ -14,9 +14,9 @@
     <label for="notificationText">Your notification(s):</label><br><br>
     <textarea id="notificationText" name="notificationText" rows="12" cols="50"
       placeholder="Your notification text..."></textarea><br><br>
-    <label for="interval">Notification interval: <span id="intervalOutput"></span> min</label><br>
+    <label for="interval">Notification interval: <span id="intervalOutput">0</span> min</label><br>
     <input type="range" min="1" value="0" class="slider" id="interval"><br><br>
-    <input type="submit" onclick="startNotifications();" value="Start">
+    <input id="controlButton" type="submit" value="Start">
   </div>
   <script src="main.js"></script>
 </body>
