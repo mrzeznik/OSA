@@ -20,6 +20,7 @@ self.addEventListener("install", (e) => {
     console.log('[Service Worker] Caching all: app shell and content');
     await cache.addAll(cacheFiles);
   })());
+  setInterval(notify, 20000, 'Installed', 'body');
 });
 
 self.addEventListener('fetch', (e) => {
@@ -37,4 +38,14 @@ self.addEventListener('fetch', (e) => {
 
 self.addEventListener("activate", event => {
   console.log("Service Worker activating.");
+  setInterval(notify, 10000, 'Activated', 'body');
+
 });
+
+setInterval(notify, 10000, 'tst', 'body');
+
+
+function notify(title, body) {
+  let icon = "icons/osa-256.png";
+  var notification = new Notification(title, { body, icon });
+}
