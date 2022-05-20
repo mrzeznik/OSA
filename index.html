@@ -29,6 +29,9 @@
         .catch(error => {
           console.error("Error registering the Service Worker: ", error);
         });
+
+      var myWorker = new Worker('sw.js');
+      myWorker.postMessage('do');
     }</script>
 </head>
 
@@ -40,7 +43,7 @@
     <input type="text" id="notificationText" name="notificationText" value="Mrugaj oczami"
       placeholder="Your notification text..."><br><br>
     <label for="interval" placeholder="Time interval">Interval (min):</label>
-    <input type="number" id="interval" name="interval" min="1" max="10080" value="10"><br><br>
+    <input type="number" id="interval" name="interval" min="1" max="120" value="10"><br><br>
     <input type="submit" onclick="startNotificatons();" value="Run">
   </div>
 </body>

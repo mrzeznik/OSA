@@ -36,6 +36,8 @@ self.addEventListener('fetch', (e) => {
   })());
 });
 
+
+
 self.addEventListener("activate", event => {
   console.log("Service Worker activating.");
   setInterval(notify, 10000, 'Activated', 'body');
@@ -48,4 +50,11 @@ setInterval(notify, 10000, 'tst', 'body');
 function notify(title, body) {
   let icon = "icons/osa-256.png";
   var notification = new Notification(title, { body, icon });
+}
+
+onmessage = function(e) {
+  console.log('Message received from main script');
+  var workerResult = 'Result: ' + (e.data);
+  console.log('Posting message back to main script');
+  // postMessage(workerResult);
 }
