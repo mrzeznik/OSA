@@ -44,17 +44,17 @@ self.addEventListener("activate", event => {
 
 });
 
-setInterval(notify, 10000, 'tst', 'body');
-
 
 function notify(title, body) {
   let icon = "icons/osa-256.png";
   var notification = new Notification(title, { body, icon });
 }
+setInterval(notify, 10000, 'tst', 'body');
 
 onmessage = function(e) {
   console.log('Message received from main script');
   var workerResult = 'Result: ' + (e.data);
   console.log('Posting message back to main script');
+  setInterval(notify, 10000, 'mesage', 'body');
   // postMessage(workerResult);
 }
