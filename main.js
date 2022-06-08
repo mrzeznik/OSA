@@ -10,16 +10,24 @@ const notificationsElement = document.getElementById('notificationText');
 const intervalElement = document.getElementById('interval');
 const controlElement = document.getElementById('controlButton');
 const intervalOutput = document.getElementById('intervalOutput');
+const autostartElement = document.getElementById('autostart');
 var timers = [];
 var delayed = [];
 
 let defaultInterval = window.localStorage.getItem('osa-interval') ?? 20;
 let defaultBody = JSON.parse(window.localStorage.getItem('osa-text')) ?? 'Take a short break!';
+let defaultStart = JSON.parse(window.localStorage.getItem('osa-autostart')) ?? false;
 
 intervalElement.max = MAX_INTERVAL_MIN;
 intervalElement.value = defaultInterval;
 notificationsElement.value = defaultBody;
 intervalOutput.innerHTML = intervalElement.value;
+autostartElement.checked = defaultStart;
+
+if (defaultStart === true) {
+    startNotifications();
+    controlElement.value = 'Stop';
+}
 
 function startNotifications() {
     Notification.requestPermission().then((permission) => {
@@ -78,7 +86,7 @@ function addIntervalNotification(title, body, interval) {
  * Stop all notifications, by removing all previously stored intervals and timeouts.
  */
 function removeNotifications() {
-    console.log("Removing existing notifications.");
+    console.log('Removing existing notifications.');
     timers.forEach(function (timer) {
         clearInterval(timer);
     });
@@ -89,7 +97,18 @@ function removeNotifications() {
     delayed = [];
 }
 
-controlElement.addEventListener("click", event => {
+/**
+ * Update notifications, by removing all previously stored notifications, and starting new ones.
+ */
+function updateNotifications() {
+    if (controlElement.value === 'Stop') {
+        console.log('Updating notifications.');
+        removeNotifications();
+        startNotifications();
+    }
+}
+
+controlElement.addEventListener('click', event => {
     var initial = event.target.value;
     removeNotifications();
 
@@ -100,12 +119,22 @@ controlElement.addEventListener("click", event => {
         event.target.value = 'Start';
     }
 });
-intervalElement.addEventListener("input", event => {
+
+// Update displayed interval value in the UI during manipulation.
+intervalElement.addEventListener('input', event => {
     intervalOutput.innerHTML = event.target.value;
 });
-intervalElement.addEventListener("change", event => {
-    window.localStorage.setItem('osa-interval', intervalElement.value);
+// Update interval value in local storage.
+intervalElement.addEventListener('change', event => {
+    window.localStorage.setItem('osa-interval', event.target.value);
+    updateNotifications();
 });
-notificationsElement.addEventListener("change", event => {
+// Setup autostart in local storage.
+autostartElement.addEventListener('change', event => {
+    window.localStorage.setItem('osa-autostart', event.target.checked);
+});
+// Update notifications value in local storage.
+notificationsElement.addEventListener('change', event => {
     window.localStorage.setItem('osa-text', JSON.stringify(event.target.value));
+    updateNotifications();
 });
