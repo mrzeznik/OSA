@@ -10,14 +10,16 @@
 <body>
   <div class="container">
     <img src="favicon.ico" alt="OSA"><br>
-    Osobisty System Atencji<br><br>
+    <span class="lessimportant">Osobisty System Atencji</span><br><br>
     <label for="notificationText">Your notification(s):</label><br><br>
-    <textarea id="notificationText" name="notificationText" rows="8" 
+    <textarea id="notificationText" name="notificationText" rows="8"
       placeholder="Your notification text..."></textarea><br>
-    <input type="checkbox" id="autostart" name="autostart" value="Autostart"><br>
-    <label for="interval">Notification interval: <span id="intervalOutput">0</span> min</label><br>
+    <label for="interval" class="lessimportant">Notification interval: <span id="intervalOutput">0</span>
+      min</label><br>
     <input type="range" min="1" value="0" class="slider" id="interval"><br><br>
-    <input id="controlButton" type="submit" value="Start">
+    <input id="controlButton" type="submit" value="Start"><br>
+    <input type="checkbox" id="autostart" name="autostart" value="Autostart" class="nominwidth lessimportant"> <label
+      for="autostart" class="nominwidth lessimportant">Autostart notifications</label><br>
   </div>
   <script src="main.js"></script>
 </body>
