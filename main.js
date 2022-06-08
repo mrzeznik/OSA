@@ -6,7 +6,7 @@ const MIN_INTERVAL_MS = 5000;
 const MAX_INTERVAL_MS = MAX_INTERVAL_MIN * BASE_MINUTE_MULTIPLIER_MS;
 const NOTIFICATION_DELIMITER = '\n';
 const notificationTitle = 'OSA';
-const notificationElement = document.getElementById('notificationText');
+const notificationsElement = document.getElementById('notificationText');
 const intervalElement = document.getElementById('interval');
 const controlElement = document.getElementById('controlButton');
 const intervalOutput = document.getElementById('intervalOutput');
@@ -18,7 +18,7 @@ let defaultBody = JSON.parse(window.localStorage.getItem('osa-text')) ?? 'Take a
 
 intervalElement.max = MAX_INTERVAL_MIN;
 intervalElement.value = defaultInterval;
-notificationElement.value = defaultBody;
+notificationsElement.value = defaultBody;
 intervalOutput.innerHTML = intervalElement.value;
 
 function startNotifications() {
@@ -27,7 +27,7 @@ function startNotifications() {
     });
 
     let interval = intervalElement.value;
-    let bodyBase = notificationElement.value
+    let bodyBase = notificationsElement.value
         .split(NOTIFICATION_DELIMITER)
         .map(line => { return line.trim(); })
         .filter(line => { return line !== undefined & line?.length > 0; }) ?? [];
@@ -35,6 +35,12 @@ function startNotifications() {
     setMultipleNotifications(interval, bodyBase);
 }
 
+/**
+ * Set multiple notifications, where every single notification will be shown with the given interval.
+ * First notification will be shown after the given interval. Stores all intervals and delayed tasks in arrays.
+ * @param {number} interval - single notification interval in miliseconds
+ * @param {Array} notifications - array of notification bodies
+ */
 function setMultipleNotifications(interval, notifications) {
     if (interval < 1 || interval > MAX_INTERVAL_MIN || notifications === undefined || notifications.length < 1) return;
 
@@ -53,6 +59,13 @@ function setMultipleNotifications(interval, notifications) {
     });
 }
 
+/**
+ * Add a new notification, that will be shown with the given interval.
+ * @param {string} title - notification title
+ * @param {string} body - notification body
+ * @param {number} interval - notification interval in miliseconds 
+ * @returns id of created interval
+ */
 function addIntervalNotification(title, body, interval) {
     if (interval < MIN_INTERVAL_MS) return;
 
@@ -61,6 +74,9 @@ function addIntervalNotification(title, body, interval) {
     }, interval);
 }
 
+/**
+ * Stop all notifications, by removing all previously stored intervals and timeouts.
+ */
 function removeNotifications() {
     console.log("Removing existing notifications.");
     timers.forEach(function (timer) {
@@ -90,6 +106,6 @@ intervalElement.addEventListener("input", event => {
 intervalElement.addEventListener("change", event => {
     window.localStorage.setItem('osa-interval', intervalElement.value);
 });
-notificationElement.addEventListener("change", event => {
+notificationsElement.addEventListener("change", event => {
     window.localStorage.setItem('osa-text', JSON.stringify(event.target.value));
 });
